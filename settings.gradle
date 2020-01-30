@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':splash'
 rootProject.name='My Application'
