@@ -2,7 +2,7 @@ package com.puddlealley.splash
 
 interface State
 
-private typealias StoreCallback<T> = (T) -> Unit
+typealias StoreCallback<T> = (T) -> Unit
 
 abstract class Store<T: State>(initialState: T) {
 
