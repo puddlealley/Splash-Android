@@ -5,7 +5,7 @@ interface State
  * This is the basic building block of a Flux application. All of your stores
  * should extend this class.
  *
- *   class CounterStore extends FluxReduceStore<number> {
+ *   class CounterStore : FluxReduceStore<number> {
  *     getInitialState(): number {
  *       return 1;
  *     }
@@ -22,20 +22,22 @@ interface State
  *     }
  *   }
  */
-abstract class FluxReduceStore<T: State>(initialState: T, dispatcher: Dispatcher): FluxStore<T>(dispatcher) {
+abstract class FluxReduceStore<T: State>(initialState: T, dispatcher: Dispatcher): FluxStore(dispatcher) {
 
     /**
      * Getter that exposes the entire state of this store. If your state is not
      * immutable you should override this and not expose _state directly.
      */
-    var state: T = initialState
+     protected var innerState: T = initialState
         private set
+
+     open val state get() = innerState
 
     /**
      * Used to reduce a stream of actions coming from the dispatcher into a
      * single state object.
      */
-    abstract fun reduce(state: T, action: Payload): T
+    protected abstract fun reduce(state: T, action: Payload): T
 
     /**
      * Checks if two versions of state are the same. You do not need to override
@@ -49,11 +51,11 @@ abstract class FluxReduceStore<T: State>(initialState: T, dispatcher: Dispatcher
         changed = false
 
         // Reduce the stream of incoming actions to state, update when necessary.
-        val startingState = this.state
+        val startingState = this.innerState
         val endingState = this.reduce(startingState, payload)
 
         if (!this.areEqual(startingState, endingState)) {
-            this.state = endingState
+            this.innerState = endingState
 
             // `__emitChange()` sets `this.__changed` to true and then the actual
             // change will be fired from the emitter at the end of the dispatch, this

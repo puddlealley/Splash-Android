@@ -4,19 +4,19 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 typealias PayloadCallback = (payload: Payload) -> Unit
-typealias Middleware = (payload: Payload, dispatch: (payload: Payload) -> Unit) -> Unit
+typealias Middleware = (dispatcher: (payload: Payload) -> Unit) -> (payload: Payload) -> Unit
 typealias DispatchToken = UUID
 
-class Dispatcher {
+class Dispatcher(middleware: Middleware) {
 
     private val callbacks = mutableMapOf<DispatchToken, PayloadCallback>()
-    private val middleware = mutableListOf<Middleware>()
     private val isDispatching = AtomicBoolean(false)
 
     // dispatch state
     private val isPending = mutableMapOf<DispatchToken, Boolean>()
     private val isHandled = mutableMapOf<DispatchToken, Boolean>()
     private var pendingPayload: Payload? = null
+    private val middlewareDispatch = middleware(this::dispatch)
 
     /**
      * Registers a callback to be invoked with every dispatched payload.
@@ -80,7 +80,7 @@ class Dispatcher {
         }
 
         // let the middleware run
-        middleware.forEach { it(payload) { dispatch(it) } }
+        middlewareDispatch(payload)
     }
 
     /**

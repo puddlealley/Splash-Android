@@ -39,20 +39,28 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-
 }
 
 dependencies {
+    compileOnly(project(path = ":splash"))
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
 
     // Android
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.1.0")
+
+    // rxjava
+    implementation("io.reactivex.rxjava2:rxjava:2.2.16")
+    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
+    implementation("com.jakewharton.rx2:replaying-share-kotlin:2.2.0")
+    implementation("com.jakewharton.rxrelay2:rxrelay:2.1.1")
+
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.9.3.kotlin12")
