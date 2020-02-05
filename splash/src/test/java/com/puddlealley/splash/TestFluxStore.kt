@@ -16,7 +16,7 @@ import java.lang.IllegalStateException
  class ChangeState : Payload
  class IgnoreState : Payload
 
-private class TestFluxStore(dispatcher: Dispatcher) : FluxStore<ExampleState>(dispatcher) {
+private class TestFluxStore(dispatcher: Dispatcher) : FluxStore(dispatcher) {
 
     override fun onDispatch(payload: Payload) {
         when (payload) {
@@ -25,7 +25,7 @@ private class TestFluxStore(dispatcher: Dispatcher) : FluxStore<ExampleState>(di
     }
 }
 
-private  class IllegalFluxStore(dispatcher: Dispatcher) : FluxStore<ExampleState>(dispatcher) {
+private  class IllegalFluxStore(dispatcher: Dispatcher) : FluxStore(dispatcher) {
     override fun onDispatch(payload: Payload) {
 
     }

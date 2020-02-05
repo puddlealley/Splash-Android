@@ -9,7 +9,7 @@ typealias StoreCallback = () -> Unit
  * extend this store directly; instead extend FluxReduceStore when creating a
  * new store.
  */
-abstract class FluxStore(
+    abstract class FluxStore(
     private val dispatcher: Dispatcher
 ) {
 

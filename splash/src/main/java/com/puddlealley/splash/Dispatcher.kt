@@ -7,7 +7,7 @@ typealias PayloadCallback = (payload: Payload) -> Unit
 typealias Middleware = (dispatcher: (payload: Payload) -> Unit) -> (payload: Payload) -> Unit
 typealias DispatchToken = UUID
 
-class Dispatcher(middleware: Middleware) {
+open class Dispatcher(middleware: Middleware = { {} }) {
 
     private val callbacks = mutableMapOf<DispatchToken, PayloadCallback>()
     private val isDispatching = AtomicBoolean(false)
@@ -16,7 +16,7 @@ class Dispatcher(middleware: Middleware) {
     private val isPending = mutableMapOf<DispatchToken, Boolean>()
     private val isHandled = mutableMapOf<DispatchToken, Boolean>()
     private var pendingPayload: Payload? = null
-    private val middlewareDispatch = middleware(this::dispatch)
+    private val middlewareDispatch = middleware { dispatch(it) }
 
     /**
      * Registers a callback to be invoked with every dispatched payload.
@@ -107,7 +107,7 @@ class Dispatcher(middleware: Middleware) {
      * Call the callback stored with the given id. Also do some internal
      * bookkeeping.
      */
-    private fun invokeCallback(id: DispatchToken)  {
+    private fun invokeCallback(id: DispatchToken) {
         isPending[id] = true
         (callbacks[id]!!)(pendingPayload!!)
         isHandled[id] = true
@@ -117,5 +117,5 @@ class Dispatcher(middleware: Middleware) {
      * Is this Dispatcher currently dispatching.
      */
     fun isDispatching(): Boolean = isDispatching.get()
-
 }
+

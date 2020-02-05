@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-    compileOnly(project(path = ":splash"))
+    implementation(project(path = ":splash"))
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
 
     // Android
