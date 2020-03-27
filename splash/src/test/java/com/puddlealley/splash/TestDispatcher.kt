@@ -1,3 +1,5 @@
+package com.puddlealley.splash
+
 import com.puddlealley.splash.Dispatcher
 import com.puddlealley.splash.Payload
 import com.puddlealley.splash.PayloadCallback
@@ -67,7 +69,7 @@ class TestDispatcher : DescribeSpec() {
                     dispatcher.waitFor(tokenB!!)
 
                     verify(exactly = 1) { callbackB.invoke(demoPayload) }
-                    callbackA(payload);
+                    callbackA(payload)
                 }
 
                 tokenB = dispatcher.register(callbackB)
@@ -150,7 +152,7 @@ class TestDispatcher : DescribeSpec() {
             it("should remain in a consistent state after a failed dispatch") {
                 class ShouldThrow(val shouldThrow: Boolean): Payload
 
-                dispatcher.register(callbackA);
+                dispatcher.register(callbackA)
                 dispatcher.register { payload ->
                     if (payload is ShouldThrow && payload.shouldThrow) {
                         throw IllegalStateException()
@@ -164,16 +166,16 @@ class TestDispatcher : DescribeSpec() {
 
                 // Cannot make assumptions about a failed dispatch.
 
-                dispatcher.dispatch(ShouldThrow(false));
+                dispatcher.dispatch(ShouldThrow(false))
 
                 verify(exactly = 2) { callbackA.invoke(any()) }
                 verify(exactly = 1) { callbackB.invoke(any()) }
             }
 
             it("should properly unregister callbacks") {
-                dispatcher.register(callbackA);
+                dispatcher.register(callbackA)
 
-                val tokenB = dispatcher.register(callbackB);
+                val tokenB = dispatcher.register(callbackB)
                 val demoPayload = object : Payload {}
                 val demoPayload2 = object : Payload {}
 
