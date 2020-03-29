@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
-import com.puddlealley.splash.android.*
-import com.puddlealley.splash.android.events
 import com.puddlealley.flux.R
 import com.puddlealley.flux.service.LoginResult
 import com.puddlealley.flux.store.AppStore
 import com.puddlealley.flux.store.login.LoginEvents
+import com.puddlealley.splash.android.actions
+import com.puddlealley.splash.android.connect
+import com.puddlealley.splash.android.events
 import io.reactivex.rxkotlin.merge
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.inject
@@ -26,10 +27,30 @@ class LoginActivity : AppCompatActivity() {
         Timber.d("onCreate")
         setContentView(R.layout.activity_login)
 
-        appStore.events(this){
+        appStore.events(this) {
             // Emit LoginClicked event on click
-            val onLoginClick = signInButton.clicks().map { LoginEvents.LoginClicked }
+            signInButton.clicks().map { LoginEvents.LoginClicked }
+        }
 
+        appStore.connect(this) { viewState ->
+            emailEntryContainer.error = viewState.loginState.emailError
+            passwordEntryContainer.error = viewState.loginState.passwordError
+            signInButton.isEnabled = viewState.loginState.canSignIn
+            signInButton.isInvisible = viewState.loginState.loading
+            progressBar.isInvisible = !viewState.loginState.loading
+        }
+
+        appStore.actions(this) { action ->
+            when (action) {
+                is LoginResult.Success -> startActivity(SecretCaveActivity.newIntent(this))
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        appStore.events(this) {
             // text entry is debounced to prevent lots of events
             val debounceTextEntry: Long = 300
 
@@ -47,27 +68,14 @@ class LoginActivity : AppCompatActivity() {
 
             // merge all events in to single observable
             listOf(
-                onLoginClick,
                 onEmailChanged,
                 onPasswordChanged
             ).merge()
         }
-
-        appStore.connect(this) { viewState ->
-            emailEntryContainer.error = viewState.loginState.emailError
-            passwordEntryContainer.error = viewState.loginState.passwordError
-            signInButton.isEnabled = viewState.loginState.canSignIn
-            signInButton.isInvisible = viewState.loginState.loading
-            progressBar.isInvisible = !viewState.loginState.loading
-        }
-
-        appStore.actions(this){ action ->
-            when (action) {
-                is LoginResult.Success -> startActivity(DeviceActivity.newIntent(this))
-            }
-        }
     }
 
 }
+
+
 
 

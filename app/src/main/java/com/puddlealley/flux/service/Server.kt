@@ -1,6 +1,7 @@
 package com.puddlealley.flux.service
 
 import io.reactivex.Single
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -19,6 +20,12 @@ class Server {
     fun login(email: String, password: String): Single<User> {
         return Single.just(User(id = "userId", name = "Rory")).delay(3, TimeUnit.SECONDS)
     }
+
+    /**
+     * Mock call that validates a secret code
+     */
+    fun validateSecretCode(secretCode: String) : Single<Boolean> =
+        Single.just(secretCode.toLowerCase(Locale.ROOT) == "abbabba").delay(3, TimeUnit.SECONDS)
 
 }
 

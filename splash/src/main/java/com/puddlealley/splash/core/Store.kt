@@ -1,10 +1,13 @@
 package com.puddlealley.splash.core
 
+import android.util.Log
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import java.lang.IllegalStateException
 
 typealias Middleware<S> = (store: Store<S>) -> Completable
@@ -99,17 +102,24 @@ private class BasicStore<VS : State>(
     private val compositeDisposeable = CompositeDisposable()
 
     override val updates = Dispatcher.actions
-            .scan(initialState) { oldState, result -> reducer(oldState, result) }
+        .scan(initialState) { oldState, result ->
+                val updated = reducer(oldState, result)
+                Log.d("test", "\n\n $result, \n $oldState, \n $updated \n\n")
+                updated
+            }
             .distinctUntilChanged()
+            .doOnNext {
+                Log.d("test", "emitting $it")
+            }
             .replayingShare()
 
     override val actions: Observable<Action> = Dispatcher.actions
 
     init {
-        // connect to the updates so that the store is always providing updates.
-        updates.subscribe().addTo(compositeDisposeable)
         val createdMiddleware = middleware?.invoke(this)
         createdMiddleware?.subscribe()?.addTo(compositeDisposeable)
+        // connect to the updates so that the store is always providing updates.
+        updates.subscribe().addTo(compositeDisposeable)
     }
 
     override fun currentViewState(): VS {

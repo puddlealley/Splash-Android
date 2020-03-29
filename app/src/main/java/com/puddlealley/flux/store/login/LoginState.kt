@@ -18,21 +18,10 @@ data class LoginState(
     val loading: Boolean = false,
     // Form state.
     val email: String = "",
-    val password: String = ""
+    val password: String = "",
+    val emailError: String = "",
+    val passwordError: String = ""
 ) : State {
-
-    val emailError: String =
-        when (email.isEmailValid()) {
-            is EmailValidResult.Valid -> ""
-            is EmailValidResult.TooShort -> "Email Too short :("
-            is EmailValidResult.BadlyFormatted -> "Email badly formatted :("
-        }
-
-    val passwordError: String =
-        when (password.isValidPassword()) {
-            PasswordValidResult.Valid -> ""
-            PasswordValidResult.TooShort -> "Password too short :("
-        }
 
     // Button state.
     val canSignIn: Boolean = emailError.isEmpty() && passwordError.isEmpty()
