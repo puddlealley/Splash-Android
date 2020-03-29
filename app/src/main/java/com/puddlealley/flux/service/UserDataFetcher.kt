@@ -1,4 +1,4 @@
-package com.rockspin.flux.service
+package com.puddlealley.flux.service
 
 import io.reactivex.ObservableSource
 import timber.log.Timber

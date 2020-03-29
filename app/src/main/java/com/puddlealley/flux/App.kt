@@ -1,4 +1,4 @@
-package com.rockspin.flux
+package com.puddlealley.flux
 
 import android.app.Application
 import timber.log.Timber

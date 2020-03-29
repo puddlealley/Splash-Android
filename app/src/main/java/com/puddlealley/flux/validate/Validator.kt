@@ -1,4 +1,4 @@
-package com.rockspin.flux.validate
+package com.puddlealley.flux.validate
 
 import com.puddlealley.splash.core.*
 

@@ -1,4 +1,4 @@
-package com.rockspin.flux
+package com.puddlealley.flux
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

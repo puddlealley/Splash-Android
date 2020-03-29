@@ -4,8 +4,11 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import java.lang.IllegalStateException
 
-
-data class EpicParams<S>(val actions: Observable<Action>, val state: Observable<S>)
+/**
+ * @param actions A stream of all actions dispatched via the dispatcher.
+ * @param stateChanges Stream of updates to the store, emits state immediately on subscription.
+*/
+data class EpicParams<S>(val actions: Observable<Action>, val stateChanges: Observable<S>)
 typealias Epic<S> = (EpicParams<S>) -> Observable<Action>
 
 /**

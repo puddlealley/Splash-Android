@@ -1,13 +1,13 @@
-package com.rockspin.flux.store
+package com.puddlealley.flux.store
 
 import com.puddlealley.splash.core.DiStore
 import com.puddlealley.splash.core.State
 import com.puddlealley.splash.core.createReducer
 import com.puddlealley.splash.core.toMiddleware
-import com.rockspin.flux.service.UserDataFetcher
-import com.rockspin.flux.store.login.LoginState
-import com.rockspin.flux.store.login.loginEpics
-import com.rockspin.flux.store.login.loginReducer
+import com.puddlealley.flux.service.UserDataFetcher
+import com.puddlealley.flux.store.login.LoginState
+import com.puddlealley.flux.store.login.loginEpics
+import com.puddlealley.flux.store.login.loginReducer
 
 /**
  * A store that holds and updates the application state.

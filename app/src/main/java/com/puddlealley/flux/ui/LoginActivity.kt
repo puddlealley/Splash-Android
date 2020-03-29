@@ -1,4 +1,4 @@
-package com.rockspin.flux.ui
+package com.puddlealley.flux.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,11 +7,10 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.puddlealley.splash.android.*
 import com.puddlealley.splash.android.events
-import com.rockspin.flux.R
-import com.rockspin.flux.service.LoginResult
-import com.rockspin.flux.store.AppStore
-import com.rockspin.flux.store.login.LoginEvents
-import com.rockspin.flux.ui.success.SuccessActivity
+import com.puddlealley.flux.R
+import com.puddlealley.flux.service.LoginResult
+import com.puddlealley.flux.store.AppStore
+import com.puddlealley.flux.store.login.LoginEvents
 import io.reactivex.rxkotlin.merge
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.inject
@@ -29,12 +28,7 @@ class LoginActivity : AppCompatActivity() {
 
         appStore.events(this){
             // Emit LoginClicked event on click
-            val onLoginClick = signInButton.clicks().map {
-                LoginEvents.LoginClicked(
-                    emailEntry.text.toString(),
-                    passwordEntry.text.toString()
-                )
-            }
+            val onLoginClick = signInButton.clicks().map { LoginEvents.LoginClicked }
 
             // text entry is debounced to prevent lots of events
             val debounceTextEntry: Long = 300
@@ -60,9 +54,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         appStore.connect(this) { viewState ->
-           // emailEntryContainer.error = viewState.emailError
-           // passwordEntryContainer.error = viewState.passwordError
-
+            emailEntryContainer.error = viewState.loginState.emailError
+            passwordEntryContainer.error = viewState.loginState.passwordError
             signInButton.isEnabled = viewState.loginState.canSignIn
             signInButton.isInvisible = viewState.loginState.loading
             progressBar.isInvisible = !viewState.loginState.loading
@@ -70,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
 
         appStore.actions(this){ action ->
             when (action) {
-                is LoginResult.Success -> startActivity(SuccessActivity.newIntent(this))
+                is LoginResult.Success -> startActivity(DeviceActivity.newIntent(this))
             }
         }
     }

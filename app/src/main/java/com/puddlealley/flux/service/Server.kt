@@ -1,4 +1,4 @@
-package com.rockspin.flux.service
+package com.puddlealley.flux.service
 
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
