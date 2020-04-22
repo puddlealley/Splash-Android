@@ -8,14 +8,14 @@ import java.lang.IllegalStateException
  * @param actions A stream of all actions dispatched via the dispatcher.
  * @param stateChanges Stream of updates to the store, emits state immediately on subscription.
 */
-data class EpicParams<S>(val actions: Observable<Action>, val stateChanges: Observable<S>)
+data class EpicParams<S>(val actions: Observable<Action>, val stateChanges: () -> S)
 typealias Epic<S> = (EpicParams<S>) -> Observable<Action>
 
 /**
  * Utility to create epic middleware
  */
 fun <S : State> createEpicMiddleware(epic: Epic<S>): Middleware<S> = { store ->
-    epic(EpicParams(store.actions, store.updates))
+    epic(EpicParams(store.actions) {store.updates.blockingFirst()})
         .doOnNext {
             if(it is Event){
                 throw IllegalStateException("epics should not emit Events, only Results.")
