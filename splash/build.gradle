@@ -5,15 +5,18 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.novoda.bintray-release'
 
 publish {
+    def version = System.getenv('RELEASE_VERSION') ?: ""
+
     userOrg = 'puddlealley'
     groupId = 'com.puddlealley'
     artifactId = 'Splash-Android'
-    publishVersion = '0.8.0'
+    publishVersion = version.isEmpty() ? "0.1.0" : version
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/puddlealley/Splash-Android'
 
     bintrayUser = System.getenv('BINTRAY_USER')
     bintrayKey = System.getenv('BINTRAY_KEY')
+    dryRun = false
 }
 
 
