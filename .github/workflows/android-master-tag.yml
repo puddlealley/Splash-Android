@@ -2,8 +2,8 @@ name: Android Master
 
 on:
   push:
-    tags:
-      - '*.*.*'
+    branches:
+      - 'master'
 
 jobs:
 
@@ -25,4 +25,4 @@ jobs:
         env: # Or as an environment variable
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
-        run: bash ./gradlew clean build bintrayUpload
+        run: bash echo $BINTRAY_USER && ./gradlew clean build bintrayUpload
