@@ -3,7 +3,10 @@ package com.puddlealley.splash.core
 /**
  * An action modifies state.
  */
-interface Action
+interface Action {
+    fun shouldLog() = false
+    fun log() = toString()
+}
 
 /**
  * An action that is dispatched after a user interaction.

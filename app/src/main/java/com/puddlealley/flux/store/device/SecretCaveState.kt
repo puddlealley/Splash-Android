@@ -7,7 +7,8 @@ import com.puddlealley.splash.core.State
 data class SecretCaveState(
     val loading : Boolean = false,
     val codeCorrect : Boolean = false,
-    val enteredCode: String = ""
+    val enteredCode: String = "",
+    var timestamp: Long = System.currentTimeMillis()
 ): State
 
 sealed class SecretCaveEvents : Event {

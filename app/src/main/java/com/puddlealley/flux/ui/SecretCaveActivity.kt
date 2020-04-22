@@ -20,6 +20,29 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
+/**
+ * Screen that listens for the secret code.
+ *
+ * The rules are:
+ * - the secret code is 7 letters long and consists of just the letters A and B.
+ * - the user enters the code by tabbing the A button and the B button 7 times.
+ * - every 7 taps a request is sent to the server to verify the secret code.
+ * - The server returns true if the code is correct.
+ * - While the server request is in progress the buttons are disabled.
+ * - a progress bar is shown while the server request is in flight.
+ * - When the code is correct a green tick is shown on the app.
+ * - the code is abbabba
+ *
+ * Your task is to fill in the Business logic that fufils the above behaviour of the app.
+ *
+ * I have created a skeleton app that used the architecture that carv uses. You should try to fill in the existing classes to
+ * create the above behaviour.
+ *
+ * A login screen exists for you to copy along with tests.
+ *
+ * You are not required to write tests.
+ *
+ */
 class SecretCaveActivity : AppCompatActivity() {
 
     private val appStore: AppStore by inject()
@@ -32,10 +55,8 @@ class SecretCaveActivity : AppCompatActivity() {
             val buttonAClicked = buttonA.clicks().map { SecretCaveEvents.LetteredEntered("A") }.share()
             val buttonBClicked = buttonB.clicks().map { SecretCaveEvents.LetteredEntered("B") }.share()
 
-            // emits CodeEntered after every 7th letter
             val codeEntered =
-                listOf(buttonAClicked, buttonBClicked)
-                    .merge()
+                listOf(buttonAClicked, buttonBClicked).merge()
                     .map { it.letter }
                     .buffer(7)
                     .map { SecretCaveEvents.CodeEntered(it.joinToString(separator = "")) }
@@ -64,12 +85,6 @@ class SecretCaveActivity : AppCompatActivity() {
             } else {
                 codeState.setImageResource(R.drawable.ic_error_red_24dp)
             }
-        }
-
-        appStore.actions
-            .ofType<CodeVerificationResult.Error>()
-            .connect(this){
-                 // show a toast when error occurs
         }
     }
 

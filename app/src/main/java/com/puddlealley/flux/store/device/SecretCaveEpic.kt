@@ -8,8 +8,8 @@ import io.reactivex.rxkotlin.ofType
 
 fun secretCarvEpic(apiRequests: ApiRequests) =
     createEpic<AppState> { (actions) ->
-        // this is a clue.
         val codeEntered = actions.ofType<SecretCaveEvents.CodeEntered>()
-
-        Observable.empty()
+        codeEntered
+            .map { it.code }
+            .switchMap { apiRequests.codeVerification(it) }
     }
