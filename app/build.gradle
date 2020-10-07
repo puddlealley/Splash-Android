@@ -46,7 +46,7 @@ dependencies {
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
 
     // RxJava
-    def rxJavaVersion = '2.2.12'
+    def rxJavaVersion = '2.2.20'
     def rxKotlinVersion = '2.4.0'
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
