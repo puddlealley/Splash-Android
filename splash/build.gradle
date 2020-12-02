@@ -95,6 +95,6 @@ dependencies {
     implementation("com.uber.autodispose:autodispose-android-archcomponents:$autoDisposeVersion")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("io.mockk:mockk:1.10.3-jdk8")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 }
