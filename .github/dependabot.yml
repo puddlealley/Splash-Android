@@ -1,0 +1,30 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: androidx.navigation:navigation-fragment
+    versions:
+    - 2.3.3
+    - 2.3.4
+  - dependency-name: androidx.navigation:navigation-ui-ktx
+    versions:
+    - 2.3.3
+    - 2.3.4
+  - dependency-name: androidx.navigation:navigation-fragment-ktx
+    versions:
+    - 2.3.3
+    - 2.3.4
+  - dependency-name: io.mockk:mockk
+    versions:
+    - 1.10.5
+    - 1.10.6
+  - dependency-name: com.android.tools.build:gradle
+    versions:
+    - 4.1.2
+  - dependency-name: io.reactivex.rxjava2:rxjava
+    versions:
+    - 2.2.20
